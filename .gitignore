@@ -144,6 +144,12 @@ ENV/
 env.bak/
 venv.bak/
 
+
+artifacts/
+.pkl
+
+
+
 # Spyder project settings
 .spyderproject
 .spyproject
