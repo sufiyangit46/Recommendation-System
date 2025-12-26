@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Restaurant Recommendation System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 35px 40px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 28px;
+        }
+
+        .header p {
+            margin-top: 8px;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: #34495e;
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 11px 14px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            transition: border 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+
+        .btn {
+            width: 100%;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            color: #ffffff;
+            border: none;
+            padding: 13px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .results {
+            margin-top: 35px;
+        }
+
+        .results h2 {
+            color: #2c3e50;
+            font-size: 22px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .card {
+            background: #f8f9fa;
+            padding: 18px 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 6px solid #667eea;
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.01);
+        }
+
+        .card h3 {
+            color: #2c3e50;
+            font-size: 18px;
+            margin-bottom: 6px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 3px;
+        }
+
+        .rating {
+            font-weight: 600;
+            color: #27ae60;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #95a5a6;
+        }
+
+        @media (max-width: 600px) {
+            .wrapper {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <div class="header">
+        <h1>🍽 Restaurant Recommendation System</h1>
+        <p>Find the best restaurants based on your personal preferences</p>
+    </div>
+
+    <form action="{{ url_for('recommend') }}" method="post">
+
+        <div class="form-group">
+            <label for="cuisine">Preferred Cuisine</label>
+            <input type="text" id="cuisine" name="cuisine" placeholder="e.g. Indian, Italian, Chinese" required>
+        </div>
+
+        <div class="form-group">
+            <label for="price_range">Price Range</label>
+            <select id="price_range" name="price_range" required>
+                <option value="" disabled selected>Select price range</option>
+                <option value="1">Low Budget</option>
+                <option value="2">Medium Budget</option>
+                <option value="3">High Budget</option>
+                <option value="4">Premium</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="online_delivery">Online Delivery Available</label>
+            <select id="online_delivery" name="online_delivery" required>
+                <option value="" disabled selected>Select option</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn">Get Recommendations</button>
+
+    </form>
+
+    {% if recommendations %}
+    <div class="results">
+        <h2>Recommended Restaurants</h2>
+
+        {% for r in recommendations %}
+        <div class="card">
+            <h3>{{ r["Restaurant Name"] }}</h3>
+            <p><strong>Cuisine:</strong> {{ r["Cuisines"] }}</p>
+            <p><strong>Cost for Two:</strong> ₹{{ r["Average Cost for two"] }}</p>
+            <p class="rating">⭐ Rating: {{ r["Aggregate rating"] }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if error %}
+        <p style="color:red; text-align:center; margin-top:20px;">{{ error }}</p>
+    {% endif %}
+
+    <div class="footer">
+        © 2025 | Built for ML Portfolio & Production Use
+    </div>
+
+</div>
+
+</body>
+</html>
